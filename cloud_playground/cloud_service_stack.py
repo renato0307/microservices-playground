@@ -7,10 +7,36 @@ from cloud_playground.transactional_outbox_construct import TransactionalOutbox
 
 
 class CloudServiceStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, construct_id: str, stage: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        self.stage = stage
+
+        self._setup_stack(scope, construct_id, stage)
+
+    def _setup_stack(self, scope: core.Construct, construct_id: str, stage: str):
+        func = self.setup_stack(scope, construct_id, stage)
+
+        outbox = TransactionalOutbox(
+            self,
+            "CloudServiceTransactionalOutbox",
+            stage)
+        outbox.event_table.grant_full_access(func)
+
+        func.add_environment(
+            "OUTBOX_TABLE_NAME",
+            outbox.event_table.table_name)
+
+    def setup_stack(self, scope: core.Construct, construct_id: str, stage: str) -> _lambda.Function:
+        raise Exception("Not implemented")
+
+
+class SampleCloudServiceStack(CloudServiceStack):
+
+    def __init__(self, scope: core.Construct, construct_id: str, stage: str, **kwargs) -> None:
+        super().__init__(scope, construct_id, stage, **kwargs)
+
+    def setup_stack(self, scope: core.Construct, construct_id: str, stage: str) -> _lambda.Function:
         layer = _lambda_py.PythonLayerVersion(
             self,
             'TaskLayer',
@@ -38,13 +64,8 @@ class CloudServiceStack(core.Stack):
 
         task_table.grant_full_access(task_function)
 
-        outbox = TransactionalOutbox(self, "CloudServiceTransactionalOutbox")
-        outbox.event_table.grant_full_access(task_function)
-
-        task_function.add_environment(
-            "OUTBOX_TABLE_NAME",
-            outbox.event_table.table_name)
-
         task_function.add_environment(
             "TASK_TABLE_NAME",
             task_table.table_name)
+
+        return task_function
