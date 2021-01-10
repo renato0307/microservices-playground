@@ -3,8 +3,8 @@ import os
 
 from aws_cdk import core
 
-from cloud_playground.cloud_service_stack import SampleCloudServiceStack
-from cloud_playground.internal_event_broker_stack import \
+from microservice_template.cloud_service_stack import SampleCloudServiceStack
+from microservice_template.internal_event_broker_stack import \
     InternalEventBrokerStack
 
 stage = os.getenv("CDK_STAGE", "Dev")

@@ -6,7 +6,7 @@ with open("README.md") as fp:
 
 
 setuptools.setup(
-    name="cloud_playground",
+    name="microservice_template",
     version="0.0.1",
 
     description="An empty CDK Python app",
@@ -15,8 +15,8 @@ setuptools.setup(
 
     author="author",
 
-    package_dir={"": "cloud_playground"},
-    packages=setuptools.find_packages(where="cloud_playground"),
+    package_dir={"": "microservice_template"},
+    packages=setuptools.find_packages(where="microservice_template"),
 
     install_requires=[
         "aws-cdk.core==1.83.0",
