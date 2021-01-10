@@ -1,1 +1,7 @@
 -e .
+aws-cdk.aws-lambda
+aws-cdk.aws-sns
+aws-cdk.aws-dynamodb
+aws-cdk.aws-lambda-python
+diagrams
+pynamodb
