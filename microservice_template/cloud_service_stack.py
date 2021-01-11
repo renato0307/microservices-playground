@@ -3,7 +3,7 @@ import aws_cdk.aws_lambda as _lambda
 import aws_cdk.aws_lambda_python as _lambda_py
 from aws_cdk import core
 
-from cloud_playground.transactional_outbox_construct import TransactionalOutbox
+from microservice_template.transactional_outbox_construct import TransactionalOutbox
 
 
 class CloudServiceStack(core.Stack):
@@ -40,13 +40,13 @@ class SampleCloudServiceStack(CloudServiceStack):
         layer = _lambda_py.PythonLayerVersion(
             self,
             'TaskLayer',
-            entry='./cloud_playground/task_lambda_layer')
+            entry='./microservice_template/task_lambda_layer')
 
         task_function = _lambda.Function(
             self,
             'TaskFunction',
             runtime=_lambda.Runtime.PYTHON_3_7,
-            code=_lambda.Code.asset('./cloud_playground/task_lambda'),
+            code=_lambda.Code.asset('./microservice_template/task_lambda'),
             layers=[layer],
             handler='do_task.handler',
             timeout=core.Duration.seconds(300))

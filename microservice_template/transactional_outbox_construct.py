@@ -23,7 +23,7 @@ class TransactionalOutbox(core.Construct):
             'MessageRelayFunction',
             runtime=_lambda.Runtime.PYTHON_3_7,
             code=_lambda.Code.asset(
-                './cloud_playground/transactional_outbox_lambda'),
+                './microservice_template/transactional_outbox_lambda'),
             handler='message_relay.handler')
 
         ieb_topic.grant_publish(message_relay)
