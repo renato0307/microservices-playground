@@ -22,7 +22,7 @@ class EventBridgeStack(core.Stack):
         # Producer function
         producer_function = _lambda.Function(
             self,
-            'ClientFunction',
+            'ProducerFunction',
             runtime=_lambda.Runtime.PYTHON_3_7,
             code=_lambda.Code.asset('./microservice_template/event_bridge_lambda'),
             handler='producer.handler',
@@ -38,14 +38,16 @@ class EventBridgeStack(core.Stack):
 
         event_bus.grant_put_events(producer_function)
 
+        # Consumer Function
         consumer_function = _lambda.Function(
             self,
-            'ServerFunction',
+            'ConsumerFunction',
             runtime=_lambda.Runtime.PYTHON_3_7,
             code=_lambda.Code.asset('./microservice_template/event_bridge_lambda'),
             handler='consumer.handler',
             timeout=core.Duration.seconds(300))
 
+        # Rules
         event_pattern  = events.EventPattern(account=[self.account])
         target = events_targets.LambdaFunction(handler=consumer_function)
         events.Rule(
