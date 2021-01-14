@@ -1,0 +1,33 @@
+{
+  "consumer": {
+    "name": "Consumer"
+  },
+  "provider": {
+    "name": "Provider"
+  },
+  "interactions": [
+    {
+      "description": "a request for UserA",
+      "providerState": "UserA exists and is not an administrator",
+      "request": {
+        "method": "get",
+        "path": "/prod"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": {
+          "message": "Go Serverless v1.0! Your function executed successfully!",
+          "field1": "Some value for this testing field",
+          "input": "XXX"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 import os
 
 from aws_cdk import core
+from contract_testing_stack import ContractTestingStack
 from event_bridge_stack import EventBridgeStack
 from request_response_messaging_stack import RequestResponseStack
 
@@ -20,5 +21,7 @@ service_stack.add_dependency(ieb_stack)
 request_response_stack = RequestResponseStack(app, f"RequestResponseSample{stage}", stage)
 
 event_bridge_stack = EventBridgeStack(app, f"EventBridge{stage}", stage)
+
+contract_testing_stack = ContractTestingStack(app, f"ContractTesting{stage}", stage)
 
 app.synth()

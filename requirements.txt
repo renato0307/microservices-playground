@@ -9,3 +9,6 @@ aws_cdk.aws-events-targets
 diagrams
 pynamodb
 boto3
+requests
+pact-python
+pytest
