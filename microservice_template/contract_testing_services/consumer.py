@@ -11,8 +11,6 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-PRODUCER_ENDPOINT = os.environ["PRODUCER_ENDPOINT"]
-
 
 class User(BaseModel):
     user_name: str
@@ -22,6 +20,7 @@ class User(BaseModel):
 
 @app.post("/users/random/{length}")
 def create_random_users(length: int):
+    PRODUCER_ENDPOINT = os.environ["PRODUCER_ENDPOINT"]
 
     fake = Faker()
     users = []
@@ -33,7 +32,7 @@ def create_random_users(length: int):
         users.append(user)
 
         response = requests.post(
-            f"{PRODUCER_ENDPOINT}users",
+            f"{PRODUCER_ENDPOINT}/users",
             json=json.loads(user.json()))
         response.raise_for_status()
 

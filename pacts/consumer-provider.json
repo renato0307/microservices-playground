@@ -10,17 +10,17 @@
       "description": "a request from the consumer",
       "providerState": "The existence of a producer",
       "request": {
-        "method": "get",
-        "path": "/prod"
+        "method": "post",
+        "path": "/users"
       },
       "response": {
         "status": 200,
         "headers": {
         },
         "body": {
-          "message": "Go Serverless v1.0! Your function executed successfully!",
-          "field1": "Some value for this testing field",
-          "input": "XXX"
+          "user_name": "rodneyyoung",
+          "email": "sue98@hotmail.com",
+          "name": "Kelly Poole"
         }
       }
     }
