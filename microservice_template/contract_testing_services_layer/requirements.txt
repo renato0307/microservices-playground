@@ -1,1 +1,5 @@
 requests
+pynamodb
+pydantic
+fastapi
+mangum

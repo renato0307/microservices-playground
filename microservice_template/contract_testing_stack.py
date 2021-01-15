@@ -15,6 +15,13 @@ class ContractTestingStack(core.Stack):
             'LambdaLayer',
             entry='./microservice_template/contract_testing_services_layer')
 
+        users_table = dyndb.Table(
+            self,
+            f"UsersTable{stage}",
+            table_name=f"UsersTable{stage}",
+            billing_mode=dyndb.BillingMode.PROVISIONED,
+            partition_key=dyndb.Attribute(name="user_name", type=dyndb.AttributeType.STRING))
+
         producer_function = _lambda.Function(
             self,
             'ProducerFunction',
@@ -23,6 +30,16 @@ class ContractTestingStack(core.Stack):
             layers=[layer],
             handler='producer.handler',
             timeout=core.Duration.seconds(300))
+
+        users_table.grant_full_access(producer_function)
+
+        producer_function.add_environment(
+            "TABLE_NAME",
+            users_table.table_name)        
+
+        producer_function.add_environment(
+            "TABLE_REGION",
+            self.region)
 
         producer_api = apigw.LambdaRestApi(
             self, 'ProducerEndpoint',

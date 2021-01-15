@@ -7,8 +7,8 @@
   },
   "interactions": [
     {
-      "description": "a request for UserA",
-      "providerState": "UserA exists and is not an administrator",
+      "description": "a request from the consumer",
+      "providerState": "The existence of a producer",
       "request": {
         "method": "get",
         "path": "/prod"

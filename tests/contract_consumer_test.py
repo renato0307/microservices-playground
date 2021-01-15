@@ -1,14 +1,13 @@
 import os
 os.environ["PRODUCER_ENDPOINT"] = "http://localhost:1234/prod"
 
-import json
 import atexit
 from microservice_template.contract_testing_services.consumer import handler
 
 from pact import Consumer, Provider
 
 
-pact = Consumer('Consumer').has_pact_with(Provider('Provider'), pact_dir="../pacts")
+pact = Consumer('Consumer').has_pact_with(Provider('Provider'), pact_dir="pacts")
 pact.start_service()
 atexit.register(pact.stop_service)
 
@@ -22,8 +21,8 @@ def test_get_value():
     }
 
     (pact
-     .given('UserA exists and is not an administrator')
-     .upon_receiving('a request for UserA')
+     .given('The existence of a producer')
+     .upon_receiving('a request from the consumer')
      .with_request('get', '/prod')
      .will_respond_with(200, body=expected))
 
