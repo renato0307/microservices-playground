@@ -11,7 +11,23 @@
       "providerState": "The existence of a producer",
       "request": {
         "method": "post",
-        "path": "/users"
+        "path": "/users",
+        "body": {
+          "user_name": "fake_user_name",
+          "email": "fake_email",
+          "name": "fake_name"
+        },
+        "matchingRules": {
+          "$.body.user_name": {
+            "match": "type"
+          },
+          "$.body.email": {
+            "match": "type"
+          },
+          "$.body.name": {
+            "match": "type"
+          }
+        }
       },
       "response": {
         "status": 200,
@@ -21,6 +37,17 @@
           "user_name": "fake_user_name",
           "email": "fake_email",
           "name": "fake_name"
+        },
+        "matchingRules": {
+          "$.body.user_name": {
+            "match": "type"
+          },
+          "$.body.email": {
+            "match": "type"
+          },
+          "$.body.name": {
+            "match": "type"
+          }
         }
       }
     }

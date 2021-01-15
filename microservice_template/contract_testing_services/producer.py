@@ -27,8 +27,8 @@ class UserModel(Model):
 
 class User(BaseModel):
     user_name: str
-    email: Optional[str] = None
-    name: Optional[str] = None
+    email: str
+    fullname: str
 
 
 app = FastAPI()
@@ -40,7 +40,7 @@ def read_user(user_name: str, response: Response):
         user = UserModel.get(user_name)
         print(user)
 
-        return User(user_name=user.user_name, email=user.email, name=user.name)
+        return User(user_name=user.user_name, email=user.email, fullname=user.name)
     except UserModel.DoesNotExist:
         print("User does not exist")
         response.status_code = status.HTTP_404_NOT_FOUND
@@ -50,7 +50,8 @@ def read_user(user_name: str, response: Response):
 @app.post("/users")
 def create_user(user: User):
     db_user = UserModel(user_name=user.user_name,
-                        email=user.email, name=user.name)
+                        email=user.email,
+                        name=user.fullname)
     db_user.save()
 
     return user
