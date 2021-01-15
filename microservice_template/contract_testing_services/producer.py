@@ -2,9 +2,9 @@
 import os
 from typing import Optional
 
-from pydantic import BaseModel
 from fastapi import FastAPI, Response, status
 from mangum import Mangum
+from pydantic import BaseModel
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
@@ -49,7 +49,8 @@ def read_user(user_name: str, response: Response):
 
 @app.post("/users")
 def create_user(user: User):
-    db_user = UserModel(user_name=user.user_name, email=user.email, name=user.name)
+    db_user = UserModel(user_name=user.user_name,
+                        email=user.email, name=user.name)
     db_user.save()
 
     return user
