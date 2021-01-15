@@ -18,11 +18,10 @@ atexit.register(pact.stop_service)
 
 def test_get_value():
 
-    fake = Faker()
     expected = {
-        "user_name": fake.user_name(),
-        "email": fake.email(),
-        "name": fake.name(),
+        "user_name": "fake_user_name",
+        "email": "fake_email",
+        "name": "fake_name",
     }
 
     (pact

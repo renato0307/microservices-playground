@@ -18,9 +18,9 @@
         "headers": {
         },
         "body": {
-          "user_name": "rodneyyoung",
-          "email": "sue98@hotmail.com",
-          "name": "Kelly Poole"
+          "user_name": "fake_user_name",
+          "email": "fake_email",
+          "name": "fake_name"
         }
       }
     }
