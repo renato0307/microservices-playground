@@ -8,7 +8,7 @@ from microservice_template.contract_testing_services.consumer import handler
 from pact import Consumer, Provider
 
 
-pact = Consumer('Consumer').has_pact_with(Provider('Provider'))
+pact = Consumer('Consumer').has_pact_with(Provider('Provider'), pact_dir="../pacts")
 pact.start_service()
 atexit.register(pact.stop_service)
 
