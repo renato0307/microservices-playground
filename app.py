@@ -3,6 +3,7 @@ import os
 
 from aws_cdk import core
 from contract_testing_stack import ContractTestingStack
+from event_based_services_stack import EventBasedServicesStack
 from event_bridge_stack import EventBridgeStack
 from request_response_messaging_stack import RequestResponseStack
 
@@ -18,10 +19,15 @@ ieb_stack = InternalEventBrokerStack(app, f"InternalEventBroker{stage}", stage)
 service_stack = SampleCloudServiceStack(app, f"CloudService{stage}", stage)
 service_stack.add_dependency(ieb_stack)
 
-request_response_stack = RequestResponseStack(app, f"RequestResponseSample{stage}", stage)
+request_response_stack = RequestResponseStack(
+    app, f"RequestResponseSample{stage}", stage)
 
 event_bridge_stack = EventBridgeStack(app, f"EventBridge{stage}", stage)
 
-contract_testing_stack = ContractTestingStack(app, f"ContractTesting{stage}", stage)
+contract_testing_stack = ContractTestingStack(
+    app, f"ContractTesting{stage}", stage)
+
+event_based_services_stack = EventBasedServicesStack(
+    app, f"EventBasedServices{stage}", stage)
 
 app.synth()
