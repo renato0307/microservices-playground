@@ -22,7 +22,7 @@ def delete_tenant(tenant_id: str):
         correlation_id=event_id,  # the start of the chain
         source='OperationsProxy',
         detail_type=DetailTypeEnum.delete_tenant.value,
-        timestamp=datetime.datetime.utcnow(),
+        timestamp=datetime.datetime.now(tz=datetime.timezone.utc),
         operation_uuid=str(uuid.uuid4()),
         operation_type=OperationTypeEnum.delete_tenant.value,
         termination_table=[

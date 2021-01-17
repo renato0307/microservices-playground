@@ -3,3 +3,4 @@ pydantic
 fastapi
 mangum
 Faker
+pynamodb

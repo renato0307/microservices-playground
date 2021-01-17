@@ -24,7 +24,7 @@ def handler(event, context):
         correlation_id=event['detail']['uuid'],
         source='DeleteTenatInfrastructureOperation',
         detail_type=DetailTypeEnum.delete_tenant_infrastructure_done.value,
-        timestamp=datetime.datetime.utcnow(),
+        timestamp=datetime.datetime.now(tz=datetime.timezone.utc),
         operation_uuid=event['detail']['operation_uuid'],
         operation_type=event['detail']['operation_type'],
         termination_table=event['detail']['termination_table'],

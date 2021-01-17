@@ -17,11 +17,15 @@ class EventBasedServicesStack(core.Stack):
 
         self.create_bus(stage)
         self.create_lambda_layer(stage)
+
         self.create_operations_proxy(stage)
+        self.create_event_ledger(stage)
+        self.create_saga_termination_checker(stage)
+
         self.create_history_service(stage)
+
         self.create_delete_tenant_infra_operation(stage)
         self.create_delete_tenant_license_operation(stage)
-        self.create_saga_terminator(stage)
 
     def create_bus(self, stage):
         """Creates Event bus"""
@@ -156,34 +160,55 @@ class EventBasedServicesStack(core.Stack):
 
         self.event_bus.grant_put_events(delete_tenant_infra_function)
 
-    def create_saga_terminator(self, stage):
-        """Creates the delete tenant license operation"""
+    def create_event_ledger(self, stage):
+        """Creates mechanism to register all events"""
 
-        saga_terminator_function = _lambda.Function(
+        event_ledger_function = _lambda.Function(
             self,
-            f"SagaTerminatorFunction{stage}",
+            f"EventLedgerFunction{stage}",
             runtime=_lambda.Runtime.PYTHON_3_7,
             code=_lambda.Code.asset(
                 './microservice_template/event_based_services'),
             layers=[self.layer],
-            handler='saga_terminator.handler',
+            handler='event_ledger.handler',
             timeout=core.Duration.seconds(300))
 
         event_pattern = events.EventPattern(account=[self.account])
         target = events_targets.LambdaFunction(
-            handler=saga_terminator_function)
+            handler=event_ledger_function)
         events.Rule(
             self,
-            id='DeliverAllEventsToSagaTerminator',
+            id='DeliverAllEventsToEventLedger',
             enabled=True,
-            rule_name='DeliverAllEventsToSagaTerminator',
-            description='Deliver all events to saga terminator',
+            rule_name='DeliverAllEventsToEventLedger',
+            description='Deliver all events to event ledger',
             event_bus=self.event_bus,
             event_pattern=event_pattern,
             targets=[target])
 
-        saga_terminator_function.add_environment(
-            "EVENT_BUS_NAME",
-            self.event_bus.event_bus_name)
+        events_ledger = dyndb.Table(
+            self,
+            f"EventsLedger{stage}",
+            table_name=f"EventsLedger{stage}",
+            billing_mode=dyndb.BillingMode.PAY_PER_REQUEST,
+            partition_key=dyndb.Attribute(
+                name="event_uuid",
+                type=dyndb.AttributeType.STRING),
+            sort_key=dyndb.Attribute(
+                name="detail_type",
+                type=dyndb.AttributeType.STRING))
 
-        self.event_bus.grant_put_events(saga_terminator_function)
+        events_ledger.grant_full_access(event_ledger_function)
+
+        event_ledger_function.add_environment(
+            "TABLE_NAME",
+            events_ledger.table_name)
+
+        event_ledger_function.add_environment(
+            "TABLE_REGION",
+            self.region)
+
+    def create_saga_termination_checker(self, stage):
+        """Creates mechanism to register all events"""
+
+        pass
